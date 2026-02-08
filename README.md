@@ -5,6 +5,13 @@ This project focuses on building a machine learning model to classify Japanese H
 
 The goal is to demonstrate a reproducible machine learning workflow, utilizing Docker to ensure a consistent execution environment.
 
+## Live Demo 
+The system is deployed and available for live testing at the following address:
+**Demo URL:** [https://k49.mikulab.com](https://k49.mikulab.com)
+
+* **Web UI:** Access the link above to use the graphical interface for character prediction.
+* **API Documentation:** Visit [https://k49.mikulab.com/docs](https://k49.mikulab.com/docs) to explore and test the interactive Swagger API reference.
+
 ## Installation & Requirements
 To ensure the program runs correctly and is easy to reproduce, we strongly recommend using **Docker**. You can either build the image locally or pull the pre-built image.
 
