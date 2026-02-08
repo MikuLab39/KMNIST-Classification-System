@@ -37,8 +37,7 @@ K49-Classification-System/
 
     > **Production Tip:** For a production environment, it is highly recommended to configure an **Nginx** reverse proxy and enable **HTTPS** for security. 
 
-### Option 2: Quick Start with Docker Compose (Recommended)
-If you prefer a quick setup using the pre-built image, you can use `docker-compose`.
+### Option 2: Quick Start with Docker Hub (Recommended)
 
 1.  Ensure you have the `docker-compose.yml` file in your directory.
 ```bash
