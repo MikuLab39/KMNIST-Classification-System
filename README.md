@@ -31,6 +31,7 @@ K49-Classification-System/
 ├── src/
 ├── model.pth
 ├── Dockerfile
+├── docker-compose.yml
 └── requirements.txt
 
  ```
