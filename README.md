@@ -1,16 +1,18 @@
 # K49 Hiragana Classification System
 
 ## Project Overview
-This project focuses on building a machine learning model to classify Japanese Hiragana characters using the **Kuzushiji-49 (K49)** dataset. The system covers the complete pipeline from data loading and Exploratory Data Analysis (EDA) to model training and evaluation. 
 
-The goal is to demonstrate a reproducible machine learning workflow, utilizing Docker to ensure a consistent execution environment.
+The **K49 Hiragana Classification System** is a scalable machine learning solution designed to automate the recognition of **Kuzushiji-49 (K49)** characters, bridging the gap between historical Japanese scripts and modern digital accessibility.
 
-## Live Demo 
-The system is deployed and available for live testing at the following address:
-**Demo URL:** [https://k49.mikulab.com](https://k49.mikulab.com)
+Beyond a simple classification model, this project implements a production-ready **Web Service Architecture**. It provides a robust RESTful API capable of handling real-time inference requests while ensuring scalability through asynchronous background processing.
 
-* **Web UI:** Access the link above to use the graphical interface for character prediction.
-* **API Documentation:** Visit [https://k49.mikulab.com/docs](https://k49.mikulab.com/docs) to explore and test the interactive Swagger API reference.
+### Key Features & Capabilities
+* **Deep Learning Classification:** Utilizes a trained neural network to accurately identify 49 classes of Hiragana characters from the KMNIST-49 dataset.
+* **Scalable API Design:**
+  * **Synchronous Mode:** Delivers low-latency, real-time responses for single-image inference.
+  * **Asynchronous Batch Mode:** Facilitates high-throughput processing for bulk image uploads, powered by a Redis-backed task queue and background workers.
+* **Full-Stack Pipeline:** Comprehensive implementation covering data ingestion, Exploratory Data Analysis (EDA), model training, and model serving.
+* **Reproducible Environment:** Fully containerized using Docker and Docker Compose, ensuring consistent deployment across development and production stages.
 
 ## Installation & Requirements
 To ensure the program runs correctly and is easy to reproduce, we strongly recommend using **Docker**. You can either build the image locally or pull the pre-built image.
@@ -31,7 +33,6 @@ K49-Classification-System/
 ├── src/
 ├── model.pth
 ├── Dockerfile
-├── docker-compose.yml
 └── requirements.txt
 
  ```
@@ -45,7 +46,8 @@ K49-Classification-System/
 
     > **Production Tip:** For a production environment, it is highly recommended to configure an **Nginx** reverse proxy and enable **HTTPS** for security. 
 
-### Option 2: Quick Start with Docker Hub (Recommended)
+### Option 2: Quick Start with Docker Compose (Recommended)
+If you prefer a quick setup using the pre-built image, you can use `docker-compose`.
 
 1.  Ensure you have the `docker-compose.yml` file in your directory.
 ```bash
@@ -233,3 +235,84 @@ For a detailed walkthrough of the machine learning pipeline—including **Explor
 
 This notebook demonstrates the complete workflow for the project, covering data distribution analysis, model architecture selection, and evaluation metrics.
 
+---
+
+### Chinese Version (中文版)
+
+
+# K49 平假名分類系統 (K49 Hiragana Classification System)
+
+## 專案簡介 (Project Overview)
+本專案旨在建立一個機器學習模型，用於分類 **Kuzushiji-49 (K49)** 資料集中的日本平假名字符。系統涵蓋了從資料讀取、探索性資料分析 (EDA) 到模型訓練與評估的完整流程。
+
+本專案重點在於展示可重現的機器學習工作流，並使用 Docker 來確保執行環境的一致性。
+
+## 環境設定 (Installation & Requirements)
+為了確保程式能正確執行並易於重現，強烈建議使用 **Docker**。您可以選擇在本地建置映像檔 (Image)，或是直接拉取已建置好的映像檔。
+
+**事前準備：**
+* 請確保您的電腦已安裝 Docker。
+
+### 選項 1：從原始碼建置 (Local Build)
+如果您想檢查程式碼並自行建置環境：
+
+1.  複製專案 (Clone)：
+    ```bash
+    git clone [https://github.com/MikuLab39/K49-Classification-System.git](https://github.com/MikuLab39/K49-Classification-System.git)
+    cd K49-Classification-System
+    ```
+2.  使用 `Dockerfile` 建置映像檔：
+    ```bash
+    # 建置映像檔並標記為 'k49-classifier'
+    docker build -t k49-classifier .
+    ```
+3.  執行容器：
+    ```bash
+    # 啟動容器
+    docker run -it k49-classifier
+    ```
+
+### 選項 2：使用 Docker Compose 快速啟動 (推薦)
+如果您希望使用預建的映像檔進行快速設定，可以使用 `docker-compose`。
+
+1.  請確保您的目錄中已有 `docker-compose.yml` 設定檔。
+```bash
+version: '3.8'
+
+services:
+  k49api-server:
+    image: mikulab/k49-api:latest
+    restart: always
+    container_name: k49api-server
+    ports:
+      - "8339:8000"
+    environment:
+      - REDIS_URL=redis://k49api-redis:6379
+    depends_on:
+      - k49api-redis
+    command: uvicorn src.api:app --host 0.0.0.0 --port 8000
+
+  k49api-redis:
+    image: redis:alpine
+    container_name: k49api-redis
+
+  k49api-worker:
+    image: mikulab/k49-api:latest
+    container_name: k49api-worker
+    restart: always
+    environment:
+      - REDIS_URL=redis://k49api-redis:6379
+    depends_on:
+      - k49api-redis
+    command: python -m src.worker
+
+```
+2.  在背景啟動服務：
+    ```bash
+    docker-compose up -d
+    ```
+3.  **存取 Web UI 介面：**
+    容器啟動後，請開啟瀏覽器並訪問：
+    `http://localhost:8339` (或您設定檔中定義的連接埠)。
+
+    > **生產環境建議：** 若部署於生產環境，強烈建議配置 **Nginx** 反向代理 (Reverse Proxy) 並啟用 **HTTPS** 以確保安全性。
