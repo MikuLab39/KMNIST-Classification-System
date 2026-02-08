@@ -7,7 +7,7 @@ import time
 from PIL import Image
 
 # ================= SETTINGS =================
-API_HOST = "https://k49api.mikulab.com" 
+API_HOST = "https://k49.mikulab.com" 
 
 # Number of samples to test
 SAMPLE_SIZE = 20 
