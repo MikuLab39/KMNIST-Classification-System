@@ -14,10 +14,9 @@ To ensure the program runs correctly and is easy to reproduce, we strongly recom
 ### Option 1: Build from Source (Local Build)
 If you want to verify the code and build the environment yourself:
 
-1.  Clone the repository:
+1.  Clone the repository and add your model:
     ```bash
-    git clone [https://github.com/MikuLab39/K49-Classification-System.git](https://github.com/MikuLab39/K49-Classification-System.git)
-    cd K49-Classification-System
+    git clone https://github.com/MikuLab39/K49-Classification-System.git
     ```
 ```bash
 K49-Classification-System/
@@ -30,14 +29,13 @@ K49-Classification-System/
  ```
 2.  Build the Docker image using the provided `Dockerfile`:
     ```bash
-    # Build the image and tag it as 'k49-api'
-    docker build -t k49-api .
+    docker-compose up --build
     ```
-3.  Run the container:
-    ```bash
-    # Run the container
-    docker run -it k49-api
-    ```
+3.  **Access the Web UI:**
+    Once the container is running, open your browser and navigate to:
+    `http://localhost:8339` (or the port defined in your configuration).
+
+    > **Production Tip:** For a production environment, it is highly recommended to configure an **Nginx** reverse proxy and enable **HTTPS** for security. 
 
 ### Option 2: Quick Start with Docker Compose (Recommended)
 If you prefer a quick setup using the pre-built image, you can use `docker-compose`.
